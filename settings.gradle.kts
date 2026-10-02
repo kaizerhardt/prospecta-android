@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Prospecta"
+rootProject.name = "ProspectaNative"
 include(":app")
