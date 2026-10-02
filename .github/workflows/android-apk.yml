@@ -30,8 +30,26 @@ jobs:
       - name: Install Android SDK packages
         shell: bash
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)
+          fi
+
+          echo "Using sdkmanager: $SDKMANAGER"
+
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager could not be found"
+            exit 1
+          fi
+
+          yes | "$SDKMANAGER" --licenses || true
+
+          "$SDKMANAGER" \
+            "platforms;android-35" \
+            "build-tools;35.0.0"
 
       - name: Generate Android app project
         shell: bash
@@ -61,7 +79,6 @@ jobs:
           }
 
           rootProject.name = "Prospecta"
-
           include(":app")
           GRADLE
 
@@ -126,22 +143,10 @@ jobs:
                   parent="android:style/Theme.Material.Light.NoActionBar">
 
                   <item name="android:fontFamily">sans</item>
-
-                  <item name="android:windowLightStatusBar">
-                      false
-                  </item>
-
-                  <item name="android:statusBarColor">
-                      #090B10
-                  </item>
-
-                  <item name="android:navigationBarColor">
-                      #090B10
-                  </item>
-
-                  <item name="android:windowBackground">
-                      #090B10
-                  </item>
+                  <item name="android:windowLightStatusBar">false</item>
+                  <item name="android:statusBarColor">#090B10</item>
+                  <item name="android:navigationBarColor">#090B10</item>
+                  <item name="android:windowBackground">#090B10</item>
 
               </style>
 
@@ -176,24 +181,16 @@ jobs:
                   );
 
                   webView = new WebView(this);
-
                   setContentView(webView);
 
-                  WebSettings settings =
-                      webView.getSettings();
+                  WebSettings settings = webView.getSettings();
 
                   settings.setJavaScriptEnabled(true);
-
                   settings.setDomStorageEnabled(true);
-
                   settings.setAllowFileAccess(true);
-
                   settings.setAllowContentAccess(true);
-
                   settings.setMediaPlaybackRequiresUserGesture(false);
-
                   settings.setBuiltInZoomControls(false);
-
                   settings.setDisplayZoomControls(false);
 
                   webView.setWebViewClient(
@@ -216,13 +213,9 @@ jobs:
                       webView != null &&
                       webView.canGoBack()
                   ) {
-
                       webView.goBack();
-
                   } else {
-
                       super.onBackPressed();
-
                   }
               }
           }
