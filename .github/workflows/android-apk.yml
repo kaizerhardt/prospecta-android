@@ -3,7 +3,8 @@ name: Build Prospecta Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -27,215 +28,24 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
+
       - name: Install Android SDK packages
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Generate Android app project
         shell: bash
         run: |
           rm -rf app
+
           mkdir -p app/src/main/java/com/prospecta/app
           mkdir -p app/src/main/assets/www
           mkdir -p app/src/main/res/values
 
           cat > settings.gradle.kts <<'GRADLE'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-
-          rootProject.name = "Prospecta"
-          include(":app")
-          GRADLE
-
-          cat > build.gradle.kts <<'GRADLE'
-          plugins {
-              id("com.android.application") version "8.7.3" apply false
-          }
-          GRADLE
-
-          cat > app/build.gradle.kts <<'GRADLE'
-          plugins {
-              id("com.android.application")
-          }
-
-          android {
-              namespace = "com.prospecta.app"
-              compileSdk = 35
-
-              defaultConfig {
-                  applicationId = "com.prospecta.app"
-                  minSdk = 24
-                  targetSdk = 35
-                  versionCode = 1
-                  versionName = "1.0.0"
-              }
-          }
-          GRADLE
-
-          cat > app/src/main/AndroidManifest.xml <<'XML'
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-              <uses-permission android:name="android.permission.INTERNET" />
-
-              <application
-                  android:allowBackup="true"
-                  android:label="Prospecta"
-                  android:theme="@style/AppTheme"
-                  android:usesCleartextTraffic="true">
-
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true"
-                      android:screenOrientation="portrait">
-
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-
-                  </activity>
-
-              </application>
-
-          </manifest>
-          XML
-
-          cat > app/src/main/res/values/styles.xml <<'XML'
-          <resources>
-
-              <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
-                  <item name="android:fontFamily">sans</item>
-                  <item name="android:windowLightStatusBar">false</item>
-                  <item name="android:statusBarColor">#090B10</item>
-                  <item name="android:navigationBarColor">#090B10</item>
-                  <item name="android:windowBackground">#090B10</item>
-              </style>
-
-          </resources>
-          XML
-
-          cat > app/src/main/java/com/prospecta/app/MainActivity.java <<'JAVA'
-          package com.prospecta.app;
-
-          import android.app.Activity;
-          import android.os.Bundle;
-          import android.webkit.WebChromeClient;
-          import android.webkit.WebSettings;
-          import android.webkit.WebView;
-          import android.webkit.WebViewClient;
-          import android.view.View;
-
-          public class MainActivity extends Activity {
-
-              private WebView webView;
-
-              @Override
-              protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-
-                  getWindow().setStatusBarColor(
-                      android.graphics.Color.rgb(9, 11, 16)
-                  );
-
-                  getWindow().setNavigationBarColor(
-                      android.graphics.Color.rgb(9, 11, 16)
-                  );
-
-                  webView = new WebView(this);
-
-                  setContentView(webView);
-
-                  WebSettings settings = webView.getSettings();
-
-                  settings.setJavaScriptEnabled(true);
-                  settings.setDomStorageEnabled(true);
-                  settings.setAllowFileAccess(true);
-                  settings.setAllowContentAccess(true);
-                  settings.setMediaPlaybackRequiresUserGesture(false);
-                  settings.setBuiltInZoomControls(false);
-                  settings.setDisplayZoomControls(false);
-
-                  webView.setWebViewClient(new WebViewClient());
-                  webView.setWebChromeClient(new WebChromeClient());
-
-                  webView.setSystemUiVisibility(
-                      View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                  );
-
-                  webView.loadUrl(
-                      "file:///android_asset/www/index.html"
-                  );
-              }
-
-              @Override
-              public void onBackPressed() {
-
-                  if (
-                      webView != null &&
-                      webView.canGoBack()
-                  ) {
-                      webView.goBack();
-                  } else {
-                      super.onBackPressed();
-                  }
-              }
-          }
-          JAVA
-
-          for f in \
-            index.html \
-            app.js \
-            styles.css \
-            legal.css \
-            manifest.webmanifest \
-            sw.js \
-            privacy.html \
-            terms.html \
-            acceptable-use.html \
-            outreach-guidelines.html \
-            refund.html \
-            dpa.html \
-            prospecta-hero.png \
-            prospecta-templates.png \
-            prospecta-send.png \
-            prospecta-analytics.png \
-            prospecta-mark.svg \
-            icon-192.png \
-            icon-512.png \
-            icon-1024.png
-          do
-            if [ -f "$f" ]; then
-              cp "$f" app/src/main/assets/www/
-            fi
-          done
-
-      - name: Build APK
-        run: gradle :app:assembleDebug --stacktrace
-
-      - name: Rename APK
-        run: |
-          cp \
-            app/build/outputs/apk/debug/app-debug.apk \
-            Prospecta.apk
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Prospecta-Android-APK
-          path: Prospecta.apk
-          retention-days: 30
+          pluginManagement
