@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0d10" />
+  <title>Prospecta — AI Prospecting Desk</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-wrap">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <div class="brand">Prospecta</div>
+          <div class="brand-sub">AI prospecting desk</div>
+        </div>
+      </div>
+
+      <button class="new-search primary full" data-nav="home">＋ New Search</button>
+
+      <nav class="nav-section">
+        <button class="nav-item active" data-nav="home">⌂ <span>Home</span></button>
+        <button class="nav-item" data-nav="prospects">◎ <span>Prospects</span><b id="prospectBadge">0</b></button>
+        <button class="nav-item" data-nav="campaigns">↗ <span>Campaigns</span></button>
+        <button class="nav-item" data-nav="inbox">✉ <span>Inbox</span><b>3</b></button>
+        <button class="nav-item" data-nav="analytics">◫ <span>Analytics</span></button>
+        <button class="nav-item" data-nav="templates">✦ <span>Templates</span></button>
+      </nav>
+
+      <div class="nav-label">Workspace</div>
+      <nav class="nav-section compact">
+        <button class="nav-item" data-nav="company">◇ <span>Company</span></button>
+        <button class="nav-item" data-nav="signature">✎ <span>Signature</span></button>
+        <button class="nav-item" data-nav="integrations">⌁ <span>Integrations</span></button>
+        <button class="nav-item" data-nav="billing">◉ <span>Billing</span></button>
+        <button class="nav-item" data-nav="support">? <span>Support</span></button>
+        <button class="nav-item" data-nav="legal">§ <span>Legal & safety</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="credit-card">
+          <div>
+            <span class="muted">Credits</span>
+            <strong id="sidebarCredits">2,484</strong>
+          </div>
+          <button class="ghost small" data-nav="billing">Top up</button>
+        </div>
+        <div class="profile-chip">
+          <div class="avatar">HO</div>
+          <div class="profile-meta"><strong>Hanson</strong><span>Growth workspace</span></div>
+          <button id="themeToggle" class="icon-btn" title="Toggle theme">☾</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow" id="pageEyebrow">PROSPECTA</span>
+          <h1 id="pageTitle">Find the right businesses.</h1>
+        </div>
+        <div class="top-actions">
+          <div class="status-pill"><i></i> Gmail connected</div>
+          <button class="ghost" data-nav="integrations">Manage</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-home">
+        <div class="hero-grid hero-brand">
+          <div class="hero-copy">
+            <span class="hero-kicker">AI SALES INTELLIGENCE</span>
+            <h2>Describe who you want to sell to.</h2>
+            <p>Prospecta finds the businesses, verifies contactability, researches the commercial angle, writes the outreach and prepares the send.</p>
+            <div class="hero-proof"><span>✓ Research-first</span><span>✓ Verified contact workflow</span><span>✓ Send from your inbox</span></div>
+          </div>
+          <div class="brand-visual-wrap"><img src="assets/prospecta-hero.png" class="brand-visual" alt="Prospecta AI prospecting illustration"></div>
+        </div>
+
+        <div class="composer glass-xl">
+          <div class="filter-row">
+            <button class="filter-chip" data-filter="location">Singapore⌄</button>
+            <button class="filter-chip" data-filter="sector">Education⌄</button>
+            <button class="filter-chip" data-filter="industry">Music Schools⌄</button>
+            <button class="filter-chip" data-filter="quality">Established SMEs⌄</button>
+            <button class="filter-chip" data-filter="count">50 prospects⌄</button>
+          </div>
+          <textarea id="searchPrompt" placeholder="e.g. Find 50 established music schools in Singapore with public business emails and a real digital acquisition opportunity.">Find 50 established music schools in Singapore. Avoid tiny one-person operators. Verify public business emails, remove duplicates, research each website, and identify the best commercial pitch.</textarea>
+          <div class="composer-bottom">
+            <div class="model-select">◈ Prospect Intelligence <span>Balanced</span></div>
+            <button id="generateBtn" class="primary send-btn">Generate prospects <span>↗</span></button>
+          </div>
+        </div>
+
+        <div id="pipeline" class="pipeline hidden"></div>
+
+        <div class="section-head">
+          <div><span class="eyebrow">RECENT</span><h3>Recent prospecting runs</h3></div>
+          <button class="ghost" data-nav="campaigns">View all</button>
+        </div>
+        <div class="run-grid">
+          <article class="run-card glass">
+            <div class="run-top"><span class="industry-icon">♫</span><span class="tag">Education</span></div>
+            <h4>Music schools in Singapore</h4>
+            <p>Established schools with verified public emails and enrolment opportunities.</p>
+            <div class="run-metrics"><strong>42</strong><span>qualified</span><strong>38</strong><span>sent</span></div>
+          </article>
+          <article class="run-card glass">
+            <div class="run-top"><span class="industry-icon">✦</span><span class="tag">Veterinary</span></div>
+            <h4>Veterinary clinics</h4>
+            <p>Multi-doctor clinics and specialist providers with high-value appointment intent.</p>
+            <div class="run-metrics"><strong>35</strong><span>qualified</span><strong>31</strong><span>sent</span></div>
+          </article>
+          <article class="run-card glass">
+            <div class="run-top"><span class="industry-icon">⌘</span><span class="tag">Technology</span></div>
+            <h4>PC builders & system integrators</h4>
+            <p>Retailers and builders with workstation, gaming and B2B potential.</p>
+            <div class="run-metrics"><strong>29</strong><span>qualified</span><strong>0</strong><span>sent</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-prospects">
+        <div class="toolbar">
+          <div class="segmented"><button class="active">All</button><button>Qualified</button><button>Needs review</button></div>
+          <div class="toolbar-right"><input id="prospectSearch" class="search" placeholder="Search prospects"/><button id="selectAllBtn" class="ghost">Select all</button></div>
+        </div>
+        <div class="prospect-layout">
+          <div class="prospect-list" id="prospectList"></div>
+          <aside class="detail-panel glass" id="detailPanel">
+            <div class="empty-detail"><div class="empty-orb">◎</div><h3>Select a prospect</h3><p>Research, commercial fit and outreach preview appear here.</p></div>
+          </aside>
+        </div>
+        <div class="selection-bar hidden" id="selectionBar">
+          <div><strong id="selectedCount">0 prospects selected</strong><span id="creditEstimate">Estimated credits: 0</span></div>
+          <div><button class="ghost" id="reviewBtn">Review outreach</button><button class="primary" id="sendSelectedBtn">Send selected</button></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-campaigns">
+        <div class="metric-grid">
+          <div class="metric glass"><span>Sent</span><strong>1,284</strong><small>+18% this month</small></div>
+          <div class="metric glass"><span>No permanent bounce</span><strong>1,218</strong><small>94.9%</small></div>
+          <div class="metric glass"><span>Replies</span><strong>126</strong><small>9.8%</small></div>
+          <div class="metric glass"><span>Positive replies</span><strong>38</strong><small>3.0%</small></div>
+        </div>
+        <div class="section-head"><div><span class="eyebrow">CAMPAIGNS</span><h3>Active outreach</h3></div></div>
+        <div class="table-wrap glass">
+          <table>
+            <thead><tr><th>Campaign</th><th>Sent</th><th>No-bounce</th><th>Replies</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Music schools — SG</strong><small>29 Sep 2026</small></td><td>90</td><td>85</td><td>11</td><td><span class="status good">Monitoring</span></td></tr>
+              <tr><td><strong>Pet industry — SG</strong><small>28 Sep 2026</small></td><td>97</td><td>92</td><td>8</td><td><span class="status good">Monitoring</span></td></tr>
+              <tr><td><strong>PC builders — SG</strong><small>Draft</small></td><td>0</td><td>—</td><td>—</td><td><span class="status">Draft</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="page-inbox">
+        <div class="inbox-layout">
+          <div class="thread-list glass">
+            <div class="thread active"><span class="reply-dot"></span><div><strong>Harmony Music School</strong><p>Hi Hanson, sounds interesting. What do you charge?</p></div><time>10:24</time></div>
+            <div class="thread"><span class="reply-dot"></span><div><strong>Polaris Music Academy</strong><p>Can you send over more details?</p></div><time>09:52</time></div>
+            <div class="thread"><span class="reply-dot"></span><div><strong>Vibratone Academy</strong><p>We are currently reviewing vendors...</p></div><time>Yesterday</time></div>
+          </div>
+          <div class="reply-panel glass">
+            <div class="reply-head"><div><span class="eyebrow">POSITIVE REPLY</span><h3>Harmony Music School</h3></div><button class="ghost">Open in Gmail</button></div>
+            <blockquote>“Hi Hanson, sounds interesting. What do you charge?”</blockquote>
+            <div class="ai-card">
+              <span class="eyebrow">PROSPECTA SUGGESTS</span>
+              <p>Give a concise range, anchor it to their enrolment objective, then move the conversation to a short call before proposing a fixed scope.</p>
+              <textarea>Thanks for getting back to me. Pricing depends on whether the priority is lead generation, Google visibility, or improving the website conversion flow. For most projects, we scope it around the commercial objective rather than a fixed package. Happy to run through what would make sense for Harmony Music School on a short Google Meet.</textarea>
+              <div class="reply-actions"><button class="ghost">Rewrite</button><button class="primary">Send reply</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-analytics">
+        <div class="metric-grid">
+          <div class="metric glass"><span>Credits spent</span><strong>7,806</strong><small>last 30 days</small></div>
+          <div class="metric glass"><span>Qualified leads</span><strong>912</strong><small>78% usable</small></div>
+          <div class="metric glass"><span>Cost / qualified lead</span><strong>8.6 cr</strong><small>avg.</small></div>
+          <div class="metric glass"><span>Reply rate</span><strong>9.8%</strong><small>+1.4 pts</small></div>
+        </div>
+        <div class="glass chart-card"><div class="chart-head"><div><span class="eyebrow">30 DAYS</span><h3>Outreach performance</h3></div><span class="tag">Singapore</span></div><div class="bars" id="bars"></div></div>
+      </section>
+
+
+      <section class="page" id="page-templates">
+        <div class="template-hero glass-xl illustrated-panel">
+          <div><span class="eyebrow">AI OUTREACH STUDIO</span><h2>Templates that understand your business.</h2><p>Start from an industry-aware structure, let Prospecta adapt it to each researched prospect, or write your own. Prospect contact details stay protected until you unlock or send.</p><button class="primary" id="newTemplateBtn">＋ New custom template</button></div>
+          <img src="assets/prospecta-templates.png" alt="AI outreach template illustration">
+        </div>
+        <div class="template-grid" id="templateGrid"></div>
+        <div class="template-builder glass" id="templateBuilder">
+          <div class="builder-head"><div><span class="eyebrow">TEMPLATE BUILDER</span><h3 id="templateBuilderTitle">Music school enrolment</h3></div><span class="tag" id="templateModeTag">AI recommended</span></div>
+          <div class="template-columns">
+            <div>
+              <label>Template objective<select id="templateObjective"><option>Generate a meeting</option><option>Get a reply</option><option>Offer an audit</option><option>Introduce a service</option></select></label>
+              <label>Tone<select id="templateTone"><option>Concise & professional</option><option>Friendly & direct</option><option>Premium consultative</option><option>Casual</option></select></label>
+              <label>Template body<textarea id="templateBody">Hi {{company}} team,
+
+I came across {{company}} and noticed {{opportunity}}. Based on what you offer, there may be an opportunity to {{business_outcome}}.
+
+{{proof_or_reason}}
+
+Would next week work for a short call?
+
+{{signature}}</textarea></label>
+              <div class="token-row"><span>{{company}}</span><span>{{opportunity}}</span><span>{{business_outcome}}</span><span>{{proof_or_reason}}</span><span>{{signature}}</span></div>
+              <div class="builder-actions"><button class="ghost" id="aiImproveTemplateBtn">AI improve</button><button class="primary" id="saveTemplateBtn">Save template</button></div>
+            </div>
+            <aside class="template-preview">
+              <span class="eyebrow">LIVE PREVIEW</span>
+              <div id="templatePreview"></div>
+              <div class="guardrail-card"><strong>Personalisation guardrails</strong><span>✓ Never invent facts</span><span>✓ Only use researched opportunities</span><span>✓ Locked signature appended automatically</span><span>✓ Contact details are not exposed until unlocked or sent</span></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-company">
+        <div class="settings-grid">
+          <div class="settings-card glass"><span class="eyebrow">SALES BRAIN</span><h3>What do you sell?</h3><label>Company<input value="MediaPlus Digital Pte Ltd"/></label><label>Website<input value="https://www.mediaplus.com.sg/"/></label><label>Primary services<textarea>Website development, SEO, Google Ads, social media marketing, lead generation, CRO.</textarea></label><label>Ideal customer<textarea>Established Singapore SMEs with enough customer value to justify meaningful digital acquisition spend.</textarea></label><div class="builder-actions"><button class="ghost" id="runSetupBtn">Run guided setup</button><button class="primary">Update sales brain</button></div></div>
+          <div class="settings-card glass"><span class="eyebrow">OFFER LIBRARY</span><h3>Offer matching</h3><div class="offer"><strong>Website / CRO</strong><p>Use when conversion friction or dated digital experience is actually supported by research.</p><i>Active</i></div><div class="offer"><strong>Google visibility</strong><p>Use when high-intent search behavior creates a clear commercial opportunity.</p><i>Active</i></div><div class="offer"><strong>Paid acquisition</strong><p>Use where the economics and buyer journey justify paid demand capture.</p><i>Active</i></div></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-signature">
+        <div class="settings-grid">
+          <div class="settings-card glass"><span class="eyebrow">LOCKED PRODUCTION SIGNATURE</span><h3>Imported from Gmail</h3><p class="muted">Prospecta preserves stable hosted assets, clickable contact links and social links. Unsupported critical assets block external sending.</p><div class="signature-preview">
+            <div class="sig-avatar">HO</div><div><h4>Hanson Ong</h4><strong>Sales Manager</strong><p>MediaPlus Digital Pte Ltd<br><span>(A subsidiary of YYForce Inc.) | Nasdaq: YFOR</span></p><p>☎ +65 6816 3168 &nbsp; | &nbsp; 📱 +65 8860 8682<br>✉ hanson.ong@mediaplus.com.sg<br>⌁ www.mediaplus.com.sg</p><div class="social-row"><a>f</a><a>◎</a><a>in</a><a>◉</a></div></div>
+          </div><div class="signature-checks"><span>✓ Contact links clickable</span><span>✓ Social links present</span><span>✓ Signature assets locked</span><span>✓ Production send eligible</span></div><button class="ghost">Re-import from Gmail</button></div>
+          <div class="settings-card glass"><span class="eyebrow">REFERENCE</span><h3>Visual signature reference</h3><img class="reference-img" src="signature-reference.png" alt="Signature reference uploaded by user"/><p class="muted">Prototype only. Production should parse and store reusable signature HTML/assets, not attach a screenshot.</p></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-integrations">
+        <div class="integration-grid">
+          <div class="integration glass"><div class="integration-logo">G</div><div><strong>Gmail</strong><p>Send outreach, read replies and reconcile bounces.</p></div><span class="status good">Connected</span></div>
+          <div class="integration glass"><div class="integration-logo">31</div><div><strong>Google Calendar</strong><p>Include booking links and meeting availability.</p></div><span class="status good">Connected</span></div>
+          <div class="integration glass"><div class="integration-logo">S</div><div><strong>Stripe</strong><p>Subscriptions, credit packs and invoices.</p></div><button class="ghost">Connect</button></div>
+          <div class="integration glass"><div class="integration-logo">V</div><div><strong>Email Verification</strong><p>Plug in ZeroBounce, NeverBounce or equivalent.</p></div><button class="ghost">Configure</button></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-billing">
+        <div class="billing-hero glass-xl illustrated-panel billing-brand"><div><span class="eyebrow">GLOBAL BILLING</span><h2><span id="billingCredits">2,484</span> credits remaining</h2><p>One Prospecta balance across web, iOS and Android. Web checkout uses Stripe; native mobile purchases are designed to sync through Apple and Google billing into the same credit ledger.</p><div class="payment-badges"><span>Cards</span><span>Apple Pay</span><span>Google Pay</span><span>Local methods</span></div><button class="primary" id="buyCreditsBtn">Buy credits</button></div><img src="assets/prospecta-send.png" alt="Prospecta secure sending and credits illustration"></div>
+        <div class="plan-grid">
+          <div class="plan glass"><h3>Solo</h3><strong>S$39<span>/mo</span></strong><p>600 credits</p><button class="ghost full checkout-btn" data-plan="solo">Choose Solo</button></div>
+          <div class="plan glass featured"><span class="popular">CURRENT</span><h3>Growth</h3><strong>S$99<span>/mo</span></strong><p>2,000 credits</p><button class="primary full checkout-btn" data-plan="growth">Manage plan</button></div>
+          <div class="plan glass"><h3>Pro</h3><strong>S$199<span>/mo</span></strong><p>5,000 credits</p><button class="ghost full checkout-btn" data-plan="pro">Upgrade</button></div>
+          <div class="plan glass"><h3>Agency</h3><strong>S$499<span>/mo</span></strong><p>15,000 credits</p><button class="ghost full checkout-btn" data-plan="agency">Upgrade</button></div>
+        </div>
+        <div class="section-head"><div><span class="eyebrow">CREDIT PACKS</span><h3>Top up without changing plan</h3></div></div>
+        <div class="credit-pack-grid">
+          <button class="credit-pack glass checkout-btn" data-plan="credits_500"><strong>500</strong><span>credits</span><em>S$29</em></button>
+          <button class="credit-pack glass checkout-btn" data-plan="credits_2000"><strong>2,000</strong><span>credits</span><em>S$89</em></button>
+          <button class="credit-pack glass checkout-btn" data-plan="credits_5000"><strong>5,000</strong><span>credits</span><em>S$179</em></button>
+        </div>
+        <p class="billing-note">Mobile store pricing may differ because Apple/Google store billing rules and local taxes can apply. Entitlements are reconciled server-side to prevent duplicate crediting.</p>
+      </section>
+
+      <section class="page" id="page-support">
+        <div class="support-hero glass-xl illustrated-panel"><div><span class="eyebrow">CONTACT SUPPORT</span><h2>Get help without leaving Prospecta.</h2><p>Account, billing, Gmail connection, deliverability, credits or campaign issues can all be routed from one support centre.</p><div class="support-actions"><a class="primary button-link" href="mailto:support@prospecta.app?subject=Prospecta%20Support">Email support</a><button class="ghost" id="copySupportBtn">Copy support email</button></div></div><img src="assets/prospecta-analytics.png" alt="Prospecta support and analytics illustration"></div>
+        <div class="support-grid">
+          <div class="settings-card glass"><span class="eyebrow">NEW TICKET</span><h3>Contact support</h3><label>Topic<select id="supportTopic"><option>Account & login</option><option>Billing & credits</option><option>Gmail / sending</option><option>Lead quality</option><option>Deliverability / bounce</option><option>Privacy / data request</option><option>Bug report</option></select></label><label>Email<input id="supportEmail" placeholder="you@company.com"></label><label>What happened?<textarea id="supportMessage" placeholder="Tell us what you were doing, what you expected, and what happened."></textarea></label><button class="primary" id="submitSupportBtn">Submit ticket</button><p class="muted">Production version posts this securely to the support API and emails a ticket reference.</p></div>
+          <div class="settings-card glass"><span class="eyebrow">QUICK HELP</span><h3>Common issues</h3><div class="faq"><strong>Why did a lead bounce?</strong><p>Publicly listed addresses can become stale. Prospecta separates “found publicly” from actual send/no-bounce status.</p></div><div class="faq"><strong>Why was sending paused?</strong><p>Safety rules can pause a campaign when bounce or account-health thresholds are exceeded.</p></div><div class="faq"><strong>Where are my credits?</strong><p>Web, iOS and Android purchases are reconciled to one server-side credit ledger.</p></div><div class="faq"><strong>Can I request deletion?</strong><p>Yes. Privacy requests are handled from Legal & safety or through support.</p></div></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-legal">
+        <div class="legal-hero glass-xl"><div><span class="eyebrow">LEGAL & SAFETY</span><h2>Built for legitimate business prospecting.</h2><p>Prospecta should help users research and contact businesses responsibly, not bypass laws, platform rules or recipient opt-outs. These are product guardrails and launch-ready draft policy sections, not a substitute for advice from qualified counsel in each market.</p></div><div class="legal-seal">§</div></div>
+        <div class="legal-grid">
+          <article class="legal-card glass"><span>01</span><h3>Terms of Service</h3><p>Account rules, credit purchases, acceptable use, service availability, limitations and dispute terms.</p><a href="legal/terms.html" target="_blank">Read draft →</a></article>
+          <article class="legal-card glass"><span>02</span><h3>Privacy Policy</h3><p>What Prospecta collects, why it is processed, retention, subprocessors and user privacy rights.</p><a href="legal/privacy.html" target="_blank">Read draft →</a></article>
+          <article class="legal-card glass"><span>03</span><h3>Acceptable Use</h3><p>No harassment, deceptive identity, unlawful scraping, sensitive-data targeting, spam evasion or ignoring opt-outs.</p><a href="legal/acceptable-use.html" target="_blank">Read draft →</a></article>
+          <article class="legal-card glass"><span>04</span><h3>Outreach Compliance</h3><p>Jurisdiction-aware suppression, unsubscribe controls, public-business-data rules and send-volume safeguards.</p><a href="legal/outreach-guidelines.html" target="_blank">Read draft →</a></article>
+          <article class="legal-card glass"><span>05</span><h3>Refund & Credits</h3><p>Purchased credits, subscription renewal, failed enrichment and refund handling.</p><a href="legal/refund.html" target="_blank">Read draft →</a></article>
+          <article class="legal-card glass"><span>06</span><h3>Data Processing</h3><p>Business customer DPA, subprocessors, security controls and deletion/export workflows.</p><a href="legal/dpa.html" target="_blank">Read draft →</a></article>
+        </div>
+        <div class="compliance-banner glass"><strong>Default safeguards</strong><span>Duplicate suppression</span><span>Global opt-out list</span><span>Bounce-rate kill switch</span><span>Per-mailbox send limits</span><span>Human authorization before first send</span><span>No sensitive-person targeting</span></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <div class="modal glass-xl" id="reviewModal">
+      <div class="modal-head"><div><span class="eyebrow">OUTREACH REVIEW</span><h3 id="modalTitle">Review selected prospects</h3></div><button id="closeModal" class="icon-btn">×</button></div>
+      <div id="modalBody"></div>
+      <div class="modal-actions"><button class="ghost" id="rewriteAllBtn">Make emails shorter</button><button class="primary" id="confirmSendBtn">Send campaign</button></div>
+    </div>
+  </div>
+
+
+  <div class="modal-backdrop" id="onboardingBackdrop">
+    <div class="onboarding-modal glass-xl">
+      <div class="onboarding-progress"><span class="active"></span><span></span><span></span><span></span></div>
+      <div id="onboardingContent"></div>
+      <div class="onboarding-actions"><button class="ghost" id="onboardingSkip">Skip for now</button><div class="onboarding-action-right"><button class="ghost hidden" id="onboardingBack">Back</button><button class="primary" id="onboardingNext">Continue</button></div></div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="app.js"></script>
+  <script>if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});</script>
+</body>
+</html>

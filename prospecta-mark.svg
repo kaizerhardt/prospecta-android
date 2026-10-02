@@ -1,0 +1,12 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <linearGradient id="g" x1="170" y1="140" x2="860" y2="890" gradientUnits="userSpaceOnUse"><stop stop-color="#57A6FF"/><stop offset=".48" stop-color="#4F63FF"/><stop offset="1" stop-color="#8A55FF"/></linearGradient>
+ <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(358 280) rotate(50) scale(820)"><stop stop-color="#171D39"/><stop offset="1" stop-color="#06070B"/></radialGradient>
+ <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="26" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+<circle cx="512" cy="512" r="274" stroke="url(#g)" stroke-width="96" opacity=".94"/>
+<ellipse cx="512" cy="512" rx="355" ry="168" transform="rotate(-24 512 512)" stroke="url(#g)" stroke-width="58" filter="url(#glow)"/>
+<circle cx="780" cy="354" r="55" fill="url(#g)" filter="url(#glow)"/>
+<circle cx="512" cy="512" r="92" fill="#F7FAFF"/>
+</svg>

@@ -1,0 +1,8 @@
+{
+  "appId": "com.prospecta.app",
+  "appName": "Prospecta",
+  "webDir": ".",
+  "server": {"androidScheme": "https"},
+  "ios": {"contentInset": "automatic"},
+  "android": {"allowMixedContent": false}
+}
