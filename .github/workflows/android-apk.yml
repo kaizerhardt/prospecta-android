@@ -27,17 +27,17 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Android SDK packages
+        shell: bash
         run: |
+          yes | sdkmanager --licenses || true
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Generate Android app project
         shell: bash
         run: |
           rm -rf app
+
           mkdir -p app/src/main/java/com/prospecta/app
           mkdir -p app/src/main/assets/www
           mkdir -p app/src/main/res/values
@@ -53,6 +53,7 @@ jobs:
 
           dependencyResolutionManagement {
               repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
               repositories {
                   google()
                   mavenCentral()
@@ -60,6 +61,7 @@ jobs:
           }
 
           rootProject.name = "Prospecta"
+
           include(":app")
           GRADLE
 
@@ -90,6 +92,7 @@ jobs:
 
           cat > app/src/main/AndroidManifest.xml <<'XML'
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
               <uses-permission android:name="android.permission.INTERNET" />
 
               <application
@@ -109,22 +112,43 @@ jobs:
                       </intent-filter>
 
                   </activity>
+
               </application>
+
           </manifest>
           XML
 
           cat > app/src/main/res/values/styles.xml <<'XML'
           <resources>
-              <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+
+              <style
+                  name="AppTheme"
+                  parent="android:style/Theme.Material.Light.NoActionBar">
+
                   <item name="android:fontFamily">sans</item>
-                  <item name="android:windowLightStatusBar">false</item>
-                  <item name="android:statusBarColor">#090B10</item>
-                  <item name="android:navigationBarColor">#090B10</item>
-                  <item name="android:windowBackground">#090B10</item>
+
+                  <item name="android:windowLightStatusBar">
+                      false
+                  </item>
+
+                  <item name="android:statusBarColor">
+                      #090B10
+                  </item>
+
+                  <item name="android:navigationBarColor">
+                      #090B10
+                  </item>
+
+                  <item name="android:windowBackground">
+                      #090B10
+                  </item>
+
               </style>
+
           </resources>
           XML
-                   cat > app/src/main/java/com/prospecta/app/MainActivity.java <<'JAVA'
+
+          cat > app/src/main/java/com/prospecta/app/MainActivity.java <<'JAVA'
           package com.prospecta.app;
 
           import android.app.Activity;
@@ -135,10 +159,12 @@ jobs:
           import android.webkit.WebViewClient;
 
           public class MainActivity extends Activity {
+
               private WebView webView;
 
               @Override
               protected void onCreate(Bundle savedInstanceState) {
+
                   super.onCreate(savedInstanceState);
 
                   getWindow().setStatusBarColor(
@@ -150,19 +176,33 @@ jobs:
                   );
 
                   webView = new WebView(this);
+
                   setContentView(webView);
 
-                  WebSettings settings = webView.getSettings();
+                  WebSettings settings =
+                      webView.getSettings();
+
                   settings.setJavaScriptEnabled(true);
+
                   settings.setDomStorageEnabled(true);
+
                   settings.setAllowFileAccess(true);
+
                   settings.setAllowContentAccess(true);
+
                   settings.setMediaPlaybackRequiresUserGesture(false);
+
                   settings.setBuiltInZoomControls(false);
+
                   settings.setDisplayZoomControls(false);
 
-                  webView.setWebViewClient(new WebViewClient());
-                  webView.setWebChromeClient(new WebChromeClient());
+                  webView.setWebViewClient(
+                      new WebViewClient()
+                  );
+
+                  webView.setWebChromeClient(
+                      new WebChromeClient()
+                  );
 
                   webView.loadUrl(
                       "file:///android_asset/www/index.html"
@@ -171,10 +211,18 @@ jobs:
 
               @Override
               public void onBackPressed() {
-                  if (webView != null && webView.canGoBack()) {
+
+                  if (
+                      webView != null &&
+                      webView.canGoBack()
+                  ) {
+
                       webView.goBack();
+
                   } else {
+
                       super.onBackPressed();
+
                   }
               }
           }
@@ -182,39 +230,80 @@ jobs:
 
           cp index.html app/src/main/assets/www/
 
-          [ -f app.js ] && cp app.js app/src/main/assets/www/
-          [ -f styles.css ] && cp styles.css app/src/main/assets/www/
-          [ -f legal.css ] && cp legal.css app/src/main/assets/www/
-          [ -f manifest.webmanifest ] && cp manifest.webmanifest app/src/main/assets/www/
-          [ -f sw.js ] && cp sw.js app/src/main/assets/www/
+          [ -f app.js ] &&
+          cp app.js app/src/main/assets/www/
 
-          [ -f privacy.html ] && cp privacy.html app/src/main/assets/www/
-          [ -f terms.html ] && cp terms.html app/src/main/assets/www/
-          [ -f acceptable-use.html ] && cp acceptable-use.html app/src/main/assets/www/
-          [ -f outreach-guidelines.html ] && cp outreach-guidelines.html app/src/main/assets/www/
-          [ -f refund.html ] && cp refund.html app/src/main/assets/www/
-          [ -f dpa.html ] && cp dpa.html app/src/main/assets/www/
+          [ -f styles.css ] &&
+          cp styles.css app/src/main/assets/www/
 
-          [ -f prospecta-hero.png ] && cp prospecta-hero.png app/src/main/assets/www/
-          [ -f prospecta-templates.png ] && cp prospecta-templates.png app/src/main/assets/www/
-          [ -f prospecta-send.png ] && cp prospecta-send.png app/src/main/assets/www/
-          [ -f prospecta-analytics.png ] && cp prospecta-analytics.png app/src/main/assets/www/
-          [ -f prospecta-mark.svg ] && cp prospecta-mark.svg app/src/main/assets/www/
+          [ -f legal.css ] &&
+          cp legal.css app/src/main/assets/www/
 
-          [ -f icon-192.png ] && cp icon-192.png app/src/main/assets/www/
-          [ -f icon-512.png ] && cp icon-512.png app/src/main/assets/www/
-          [ -f icon-1024.png ] && cp icon-1024.png app/src/main/assets/www/
+          [ -f manifest.webmanifest ] &&
+          cp manifest.webmanifest app/src/main/assets/www/
+
+          [ -f sw.js ] &&
+          cp sw.js app/src/main/assets/www/
+
+          [ -f privacy.html ] &&
+          cp privacy.html app/src/main/assets/www/
+
+          [ -f terms.html ] &&
+          cp terms.html app/src/main/assets/www/
+
+          [ -f acceptable-use.html ] &&
+          cp acceptable-use.html app/src/main/assets/www/
+
+          [ -f outreach-guidelines.html ] &&
+          cp outreach-guidelines.html app/src/main/assets/www/
+
+          [ -f refund.html ] &&
+          cp refund.html app/src/main/assets/www/
+
+          [ -f dpa.html ] &&
+          cp dpa.html app/src/main/assets/www/
+
+          [ -f prospecta-hero.png ] &&
+          cp prospecta-hero.png app/src/main/assets/www/
+
+          [ -f prospecta-templates.png ] &&
+          cp prospecta-templates.png app/src/main/assets/www/
+
+          [ -f prospecta-send.png ] &&
+          cp prospecta-send.png app/src/main/assets/www/
+
+          [ -f prospecta-analytics.png ] &&
+          cp prospecta-analytics.png app/src/main/assets/www/
+
+          [ -f prospecta-mark.svg ] &&
+          cp prospecta-mark.svg app/src/main/assets/www/
+
+          [ -f icon-192.png ] &&
+          cp icon-192.png app/src/main/assets/www/
+
+          [ -f icon-512.png ] &&
+          cp icon-512.png app/src/main/assets/www/
+
+          [ -f icon-1024.png ] &&
+          cp icon-1024.png app/src/main/assets/www/
 
       - name: Build APK
-        run: gradle :app:assembleDebug --stacktrace
+        run: |
+          gradle :app:assembleDebug --stacktrace
 
       - name: Rename APK
         run: |
-          cp app/build/outputs/apk/debug/app-debug.apk Prospecta-debug.apk
+          cp \
+          app/build/outputs/apk/debug/app-debug.apk \
+          Prospecta-debug.apk
+
+      - name: Verify APK
+        run: |
+          ls -lh Prospecta-debug.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: Prospecta-Android-APK
           path: Prospecta-debug.apk
-          retention-days: 30 
+          retention-days: 30
